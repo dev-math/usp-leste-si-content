@@ -1,0 +1,19 @@
+name: Ping other repos
+
+on:
+  push:
+    branchs:
+      - 'main'
+
+jobs:
+  ping:
+    # don't run in forks
+    if: github.repository == "${{ vars.ORIGINAL_REPO }}"
+    runs-on: ubuntu-latest
+    steps:
+      - name: Ping Eleventy Repository
+        uses: peter-evans/repository-dispatch@v2
+        with:
+          token: ${{ secrets.REPO_PINGER_ELEVENTY }}
+          repository: ${{ vars.BUILD_REPO }}
+          event-type: ping
